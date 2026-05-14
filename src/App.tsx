@@ -31,7 +31,7 @@ interface PrintJob {
   inkEstimate?: string;
 }
 
-type Tab = 'summary' | 'printers' | 'queue' | 'logs';
+type Tab = 'summary' | 'printers' | 'queue' | 'logs' | 'deploy';
 
 // --- Components ---
 
@@ -176,6 +176,7 @@ export default function App() {
           
           <div className="px-4 py-2 mt-6 text-[10px] text-gray-600 font-mono uppercase tracking-widest">Logs & Debug</div>
           <SidebarItem icon={Terminal} label="System Logs" active={activeTab === 'logs'} onClick={() => setActiveTab('logs')} />
+          <SidebarItem icon={Upload} label="Deploy to PVE" active={activeTab === 'deploy'} onClick={() => setActiveTab('deploy')} />
           <SidebarItem icon={Settings} label="LXC Settings" active={false} onClick={() => {}} />
         </nav>
 
@@ -461,6 +462,70 @@ export default function App() {
                     placeholder="Type command (reboot, clear, cups status)..." 
                     className="bg-transparent border-none focus:outline-none text-xs font-mono flex-1 text-white placeholder-gray-700"
                    />
+                </div>
+              </motion.div>
+            )}
+
+            {activeTab === 'deploy' && (
+              <motion.div 
+                key="deploy"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="space-y-6"
+              >
+                <div className="bg-[#121212] border border-[#ff6b00]/30 rounded-sm p-8 flex flex-col items-center text-center">
+                  <div className="w-16 h-16 bg-[#ff6b00]/10 rounded-full flex items-center justify-center mb-6 border border-[#ff6b00]/20">
+                    <Upload size={32} className="text-[#ff6b00]" />
+                  </div>
+                  <h2 className="text-2xl font-bold mb-2">Proxmox One-Line Installer</h2>
+                  <p className="text-gray-400 max-w-lg mb-8 leading-relaxed">
+                    Deploy this entire print server LXC to your Proxmox Host in seconds. 
+                    This script automates container creation, Node.js installation, and network setup.
+                  </p>
+
+                  <div className="w-full max-w-3xl bg-black rounded-md border border-[#333] p-6 text-left font-mono">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-[10px] text-gray-600 uppercase font-bold tracking-widest">Execute on Proxmox Shell</span>
+                      <button 
+                        onClick={() => navigator.clipboard.writeText(`bash -c "$(wget -qLO - ${window.location.origin}/proxmox_install.sh)"`)}
+                        className="text-[10px] text-[#ff6b00] hover:underline"
+                      >
+                        Copy Command
+                      </button>
+                    </div>
+                    <div className="text-sm break-all text-[#33ff33] leading-loose">
+                      bash -c "$(wget -qLO - {window.location.origin}/proxmox_install.sh)"
+                    </div>
+                  </div>
+
+                  <div className="mt-12 grid grid-cols-3 gap-6 w-full text-left">
+                    <div className="bg-[#1a1a1a] p-4 border border-[#333] rounded-sm">
+                      <div className="text-[#ff6b00] mb-2 font-bold text-xs uppercase">Step 1</div>
+                      <p className="text-[11px] text-gray-500">Open your Proxmox Host shell via the web interface or SSH.</p>
+                    </div>
+                    <div className="bg-[#1a1a1a] p-4 border border-[#333] rounded-sm">
+                      <div className="text-[#ff6b00] mb-2 font-bold text-xs uppercase">Step 2</div>
+                      <p className="text-[11px] text-gray-500">Paste and run the one-line command shown above.</p>
+                    </div>
+                    <div className="bg-[#1a1a1a] p-4 border border-[#333] rounded-sm">
+                      <div className="text-[#ff6b00] mb-2 font-bold text-xs uppercase">Step 3</div>
+                      <p className="text-[11px] text-gray-500">Follow the prompts to confirm IDs and Hostnames.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-[#1a1a1a] border border-[#2a2a2a] p-6 rounded-sm">
+                   <h3 className="text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+                     <Settings size={14} className="text-gray-400" />
+                     Installer Defaults
+                   </h3>
+                   <div className="grid grid-cols-2 gap-y-2 text-[11px] font-mono">
+                      <div className="text-gray-500">LXC OS Template:</div><div className="text-gray-300">Debian 12 (latest)</div>
+                      <div className="text-gray-500">Default Resources:</div><div className="text-gray-300">512MB RAM / 1 Core / 4GB Disk</div>
+                      <div className="text-gray-500">Network stack:</div><div className="text-gray-300">DHCP / vmbr0 Bridge</div>
+                      <div className="text-gray-500">Node Runtime:</div><div className="text-gray-300">v20.x (LTS)</div>
+                   </div>
                 </div>
               </motion.div>
             )}
