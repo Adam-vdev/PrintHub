@@ -2,23 +2,11 @@ import express from "express";
 import path from "path";
 import multer from "multer";
 import { createServer as createViteServer } from "vite";
-import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
-
-// Setup Gemini
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-  httpOptions: {
-    headers: {
-      'User-Agent': 'aistudio-build',
-    }
-  }
-});
 
 // Configure Multer for PDF/Image uploads
 const storage = multer.memoryStorage();
@@ -74,35 +62,11 @@ app.post("/api/print", upload.single("file"), async (req, res) => {
 
   addLog(`UPLOAD: Received file '${filename}' for Job ID: ${jobId}`);
 
-  // Use Gemini for "Smart Analysis"
-  let inkEstimate = "Calculating...";
-  let pages = Math.floor(Math.random() * 5) + 1; // Default mock
-
-  try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: `Analyze this print job request. Filename: ${filename}. Estimate page count and ink intensity (Low/Medium/High). Return JSON.`,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            estimatedPages: { type: Type.INTEGER },
-            inkIntensity: { type: Type.STRING },
-            summary: { type: Type.STRING }
-          },
-          required: ["estimatedPages", "inkIntensity"]
-        }
-      }
-    });
-
-    const analysis = JSON.parse(response.text);
-    pages = analysis.estimatedPages || pages;
-    inkEstimate = analysis.inkIntensity;
-    addLog(`ANALYSIS: Gemini determined ${pages} pages with ${inkEstimate} ink intensity.`);
-  } catch (err) {
-    addLog(`ERROR: Gemini analysis failed. Using defaults.`);
-  }
+  // Base mock logic (AI removed)
+  const pages = Math.floor(Math.random() * 5) + 1;
+  const inkEstimate = ['Low', 'Medium', 'High'][Math.floor(Math.random() * 3)];
+  
+  addLog(`ANALYSIS: System determined ${pages} pages with ${inkEstimate} ink intensity.`);
 
   const newJob: PrintJob = {
     id: jobId,

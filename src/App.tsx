@@ -290,7 +290,7 @@ export default function App() {
                         <p className="text-[10px] text-gray-600 font-mono mt-1">PDF, PNG, JPG (MAX. 10MB)</p>
                       </label>
                       <p className="text-[10px] text-gray-500 italic text-center px-4">
-                        Supported by Gemini Smart Analysis™: Our AI estimates pages and ink intensity for accurate queue prioritization.
+                        System automatically estimates pages and ink intensity for accurate queue prioritization.
                       </p>
                     </div>
                   </div>
@@ -323,7 +323,7 @@ export default function App() {
                           <th className="px-6 py-3 font-medium">Filename</th>
                           <th className="px-6 py-3 font-medium">Status</th>
                           <th className="px-6 py-3 font-medium">Progress</th>
-                          <th className="px-6 py-3 font-medium">Ink (AI)</th>
+                          <th className="px-6 py-3 font-medium">Ink Intensity</th>
                         </tr>
                       </thead>
                       <tbody>
