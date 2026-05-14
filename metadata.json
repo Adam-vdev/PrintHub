@@ -1,0 +1,8 @@
+{
+  "name": "PrintFlow LXC",
+  "description": "A technical, web-based print server dashboard for LXC containers with Proxmox-inspired aesthetics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
