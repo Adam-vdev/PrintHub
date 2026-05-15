@@ -48,18 +48,27 @@ sleep 5
 # Setup inside the container
 echo "Installing dependencies inside container..."
 pct exec $CTID -- bash -c "
-  apt-get update && apt-get install -y curl git sudo
+  apt-get update && apt-get install -y \
+    curl git sudo cups cups-client \
+    avahi-daemon libnss-mdns
+
+  # Install Node.js 20
   curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
   apt-get install -y nodejs
+
+  # Configure CUPS for web access
+  cupsctl --remote-admin --remote-any
+  /etc/init.d/cups restart
 "
 
-# App Installation Logic (Mocking the clone from your specific environment)
-echo "Setting up PrintFlow Service..."
+# App Installation
+echo "Deploying PrintFlow Web Dashboard..."
 pct exec $CTID -- bash -c "
   mkdir -p /opt/printflow
-  # Note: In a real scenario, you would git clone here. 
-  # For this specific applet, we create a placeholder service.
-  echo 'PrintFlow Service Installed successfully. Access at http://[IP]:3000'
+  # In production, clone from github: 
+  # git clone https://github.com/USER/REPO.git /opt/printflow
+  # Running placeholder for this demo
+  echo 'PrintFlow LXC Logic Deployed'
 "
 
 echo "-------------------------------------------------------"
